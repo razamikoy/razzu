@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will you be my girlfriend?</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&familyPoppins:wght@400;600&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #521300 0%, #ff893f 99%, #ff8026 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            /* Prevent scrolling */
+            color: #fff;
+        }
+
+        /* --- Cursor Heart Trail Styles --- */
+        .heart-cursor {
+            position: absolute;
+            color: #521300;
+            font-size: 20px;
+            pointer-events: none;
+            animation: fadeUp 1s linear forwards;
+            z-index: 9999;
+        }
+
+        @keyframes fadeUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-30px) scale(1.5);
+            }
+        }
+
+        /* --- Page Container Styles --- */
+        .container {
+            background: rgba(255, 184, 153, 0.9);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgb(0, 0, 0);
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        h1,
+        h2 {
+            font-family: 'Pacifico', cursive;
+            color: #000000;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+        }
+
+        p {
+            color: #000000;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        /* --- Page 1: Buttons --- */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        button {
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        #yesBtn {
+            background-color: #f88000;
+            color: rgb(0, 0, 0);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.942);
+        }
+
+        #noBtn {
+            background-color: #ccc;
+            color: rgb(0, 0, 0);
+        }
+
+        /* --- Page 2: Form Styles --- */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            color: #000000;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #000000;
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #ac4200;
+        }
+
+        .choices {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .choice-card {
+            flex: 1;
+            background: #ff6a00;
+            border: 2px solid #000000;
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: black;
+        }
+
+        .choice-card:hover,
+        .choice-card.selected {
+            border-color: #ff4800;
+            background: #fff;
+        }
+
+        .choice-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        #continueBtn {
+            background: #ff6600;
+            color: white;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* --- Page 3: Summary Card --- */
+        .summary-card {
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 15px;
+            padding: 20px;
+            color: #555;
+        }
+
+        .summary-item {
+            margin: 15px 0;
+            border-bottom: 1px dashed #481a00;
+            padding-bottom: 10px;
+        }
+
+        .summary-label {
+            color: #000000;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        /* Utility to hide pages */
+        .hidden {
+            display: none !important;
+        }
+
+        .choice-image {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <video muted loop id="bg-video">
+        <source src="bgg.mp4" type="video/mp4">
+    </video>
+    <audio id="bg-music" loop>
+        <source src="songong.mp3" type="audio/mp3">
+    </audio>
+    <!-- Page 1: The Proposal -->
+    <div id="page1" class="container">
+        <h1>Let's be something <br>More?</h1>
+        <p>Because you've always been special to me😋. </p>
+        <div class="btn-group">
+            <button id="yesBtn">Yes I do 🤎</button>
+            <button id="noBtn">No, (Maaf ak maksa) 😛</button>
+        </div>
+    </div>
+
+    <!-- Page 2: Date Schedule -->
+    <div id="page2" class="container hidden">
+        <h2>Let's Plan a Date!</h2>
+        <p>Pick a time & Activities.</p>
+
+        <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="dateInput">
+        </div>
+
+        <div class="form-group">
+            <label>Time</label>
+            <input type="time" id="timeInput">
+        </div>
+
+        <label>Choose Activities</label>
+        <div class="choices">
+            <div class="choice-card" onclick="selectOption(this, 'Museum 🖼️')">
+                <img src="perpus.jpeg" alt="" class="choice-image">
+                <span>Museum</span>
+            </div>
+            <div class="choice-card" onclick="selectOption(this, 'Library 📙')">
+                <img src="museum.jpeg" alt="" class="choice-image">
+                <span>Library</span>
+            </div>
+            <div class="choice-card" onclick="selectOption(this, 'Blok M 🍰')">
+                <img src="blokem.jpeg" alt="" class="choice-image">
+                <span>Blok M</span>
+            </div>
+        </div>
+
+        <button id="continueBtn" onclick="goToPage3()">Continue 🤎</button>
+    </div>
+
+    <!-- Page 3: Summary -->
+    <div id="page3" class="container hidden">
+        <h2>Date Confirmed! 🤗</h2>
+        <p>YEYYY FINALLY OFFICIAL</p>
+
+        <div class="summary-card">
+            <div class="summary-item">
+                <div class="summary-label">Date:</div>
+                <div id="displayDate">-</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Time:</div>
+                <div id="displayTime">-</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Activity:</div>
+                <div id="displayActivity">-</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. Cursor Heart Trail Logic ---
+        document.addEventListener('mousemove', function (e) {
+            let heart = document.createElement('div');
+            heart.classList.add('heart-cursor');
+            heart.innerHTML = '❤';
+            heart.style.left = e.pageX + 'px';
+            heart.style.top = e.pageY + 'px';
+            document.body.appendChild(heart);
+
+            // Remove heart after animation
+            setTimeout(() => {
+                heart.remove();
+            }, 1000);
+        });
+
+        // --- 2. Page Navigation & "Run Away" Button Logic ---
+
+        const page1 = document.getElementById('page1');
+        const page2 = document.getElementById('page2');
+        const page3 = document.getElementById('page3');
+        const noBtn = document.getElementById('noBtn');
+        const bgVideo = document.getElementById('bg-video');
+        const bgMusic = document.getElementById('bg-music');
+
+        // Logic for "Yes" Button
+        document.getElementById('yesBtn').addEventListener('click', function () {
+            page1.classList.add('hidden');
+            page2.classList.remove('hidden');
+        });
+
+        // Logic for "No" Button (The Fleeing Button)
+        noBtn.addEventListener('mouseover', function () {
+            // Get window dimensions
+            const w = window.innerWidth - noBtn.offsetWidth;
+            const h = window.innerHeight - noBtn.offsetHeight;
+
+            // Calculate random position
+            const x = Math.random() * w;
+            const y = Math.random() * h;
+
+            // Apply new position using absolute positioning
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        });
+
+        // Also make it run away on click just in case they catch it
+        noBtn.addEventListener('click', function () {
+            noBtn.click(); // Trigger the mouseover logic again effectively
+            // Reset position to center just to confuse them further? No, let's just move it.
+            noBtn.dispatchEvent(new Event('mouseover'));
+        });
+
+        // --- 3. Page 2 Functionality ---
+
+        let selectedActivity = "";
+
+        function selectOption(element, value) {
+            // Remove selected class from all
+            document.querySelectorAll('.choice-card').forEach(card => card.classList.remove('selected'));
+            // Add to clicked
+            element.classList.add('selected');
+            selectedActivity = value;
+        }
+
+        function goToPage3() {
+            const dateVal = document.getElementById('dateInput').value;
+            const timeVal = document.getElementById('timeInput').value;
+
+            if (!dateVal || !timeVal || !selectedActivity) {
+                alert("Please fill in all the details!");
+                return;
+            }
+
+            // Update Page 3 Text
+            document.getElementById('displayDate').innerText = dateVal;
+            document.getElementById('displayTime').innerText = timeVal;
+            document.getElementById('displayActivity').innerText = selectedActivity;
+
+            //Bg vidio
+            bgVideo.style.display = 'block';
+            bgVideo.play();
+
+            //Musik
+            bgMusic.play();
+
+            // Switch Pages
+            page2.classList.add('hidden');
+            page3.classList.remove('hidden');
+        }
+
+    </script>
+</body>
+
+</html>
